@@ -51,3 +51,13 @@ endif()
 if(QLEMENTINE_SHOWCASE)
   add_subdirectory(showcase)
 endif()
+
+# for console output
+set_target_properties("showcase" "sandbox" PROPERTIES
+  WIN32_EXECUTABLE OFF
+)
+
+# .vscode/settings.json
+# {
+#     "terminal.integrated.defaultProfile.windows": "PowerShell",
+# }
