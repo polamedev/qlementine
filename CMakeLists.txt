@@ -51,3 +51,7 @@ endif()
 if(QLEMENTINE_SHOWCASE)
   add_subdirectory(showcase)
 endif()
+
+set_target_properties("showcase" "sandbox" PROPERTIES
+  WIN32_EXECUTABLE OFF
+)
