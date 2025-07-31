@@ -74,6 +74,10 @@ public:
   }
 
   void restartIfNeeded(T const& value) {
+    if (loopEnabled() && !isRunning()) {
+      _startValueInitialized = false;
+      _finalValueInitialized = false;
+    }
     if (value != finalValue() || !hasFinalValue()) {
       restart(value);
     }
