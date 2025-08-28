@@ -1655,12 +1655,14 @@ void QlementineStyle::drawControl(ControlElement ce, const QStyleOption* opt, QP
         const auto& fgColor = toolButtonForegroundColor(mouse, role);
         const auto spacing = _impl->theme.spacing;
         const auto hasMenu = optToolButton->features.testFlag(QStyleOptionToolButton::HasMenu);
-        const auto leftPadding = buttonStyle == Qt::ToolButtonTextOnly ? spacing * 2 : spacing;
+        // const auto leftPadding = buttonStyle == Qt::ToolButtonTextOnly ? spacing * 2 : spacing;
+        const auto leftPadding = buttonStyle == Qt::ToolButtonTextOnly ? spacing : spacing;
         const auto hasIcon = showIcon && !iconSize.isEmpty();
         const auto hasText = showText && !optToolButton->text.isEmpty();
         const auto rightPadding =
           !hasMenu && (buttonStyle == Qt::ToolButtonTextOnly || buttonStyle == Qt::ToolButtonTextBesideIcon)
-            ? spacing * 2
+            // ? spacing * 2
+            ? spacing
             : spacing;
         const auto fgRect = rect.adjusted(leftPadding, 0, -rightPadding, 0);
         const auto centered = !hasMenu;
@@ -3546,7 +3548,7 @@ QRect QlementineStyle::subControlRect(
         const auto separatorW = _impl->theme.borderWidth;
         const auto spacing = _impl->theme.spacing;
         const auto menuButtonW =
-          hasMenu ? (menuIsOnSeparateButton ? separatorW + iconSize.width() + spacing / 2 : iconSize.width()) : 0;
+          hasMenu ? (menuIsOnSeparateButton ? separatorW + iconSize.width() + spacing / 2 : iconSize.width() - spacing) : 0;
         const auto buttonW = rect.width() - menuButtonW;
         switch (sc) {
           case SC_ToolButton:
@@ -3777,8 +3779,8 @@ QSize QlementineStyle::sizeFromContents(
         const auto menuIsOnSeparateButton =
           hasMenu && optToolButton->features.testFlag(QStyleOptionToolButton::ToolButtonFeature::MenuButtonPopup);
 
-        const auto separatorW = menuIsOnSeparateButton ? _impl->theme.borderWidth : 0;
-        const auto menuIndicatorW = hasMenu ? separatorW + iconSize.width() + spacing / 2 : 0;
+        const auto separatorW = menuIsOnSeparateButton ? _impl->theme.borderWidth + spacing / 2 : 0;
+        const auto menuIndicatorW = hasMenu ? separatorW + iconSize.width() : 0;
         const auto h = iconSize.height() < _impl->theme.controlHeightLarge ? _impl->theme.controlHeightLarge
                                                                            : iconSize.height() + _impl->theme.spacing;
 
@@ -3787,8 +3789,10 @@ QSize QlementineStyle::sizeFromContents(
             const auto textW =
               optToolButton->fontMetrics.boundingRect(optToolButton->rect, Qt::AlignCenter, optToolButton->text)
                 .width();
-            const auto leftPadding = spacing * 2;
-            const auto rightPadding = hasMenu ? spacing : spacing * 2;
+            // const auto leftPadding = spacing * 2;
+            // const auto rightPadding = hasMenu ? spacing : spacing * 2;
+            const auto leftPadding = spacing;
+            const auto rightPadding = spacing;
             const auto w = leftPadding + textW + rightPadding + menuIndicatorW;
             return QSize{ w, h };
           }
@@ -3803,7 +3807,8 @@ QSize QlementineStyle::sizeFromContents(
               optToolButton->fontMetrics.boundingRect(optToolButton->rect, Qt::AlignCenter, optToolButton->text)
                 .width();
             const auto leftPadding = spacing;
-            const auto rightPadding = hasMenu ? spacing : spacing * 2;
+            // const auto rightPadding = hasMenu ? spacing : spacing * 2;
+            const auto rightPadding = hasMenu ? spacing : spacing;
             const auto w = leftPadding + iconW + spacing + textW + rightPadding + menuIndicatorW;
             return QSize{ w, h };
           }
